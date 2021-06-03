@@ -1,0 +1,30 @@
+#This script is for determining tissue specificity
+#input is normalized (e.g. TPM) averages for tissues of interest (e.g. Kronos sampling stages)
+
+library(knitr)
+setwd("tau/spike specific/")
+
+
+exprdata <- read.csv("kronos_choulet_tpm.csv", 
+                      row.names = 1,
+                      comment = "#",
+                      header = TRUE,
+                      stringsAsFactors=F)
+
+dim(exprdata)
+keep <- rowSums(exprdata) > 1
+exprdata <- exprdata[keep,]
+dim(exprdata)
+
+tau<-function(x){
+  if(any(is.na(x))) stop('error occured')
+  if(any(x<0)) stop('Negative input values not permitted. Maybe data is log transformed?')
+  t<-sum(1-x/max(x))/(length(x)-1)
+}
+
+tau_out <- apply(exprdata, 1, tau)
+
+exprdata$tau <- tau_out
+
+
+write.csv(exprdata, "kronos_choulet_tau.csv")
