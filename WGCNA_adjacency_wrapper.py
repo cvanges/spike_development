@@ -13,7 +13,7 @@ processes = set()
 maxprocesses = 11
 
 lines = []
-with open('overlap_DEGs_tpms_standard_input_allreps.csv', 'r') as f:
+with open('Kronos_expression.csv', 'r') as f:
 	lines = f.readlines()
 
 if not os.path.isdir('samples/'):
